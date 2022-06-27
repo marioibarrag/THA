@@ -28,10 +28,40 @@ class DetailViewController: UIViewController {
         return label
     }()
     
+    let satScoresLabel: UILabel = {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .title2)
+        let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: "SAT Scores:")
+        attributeString.addAttribute(.underlineStyle, value: 1, range: NSMakeRange(0, attributeString.length))
+        label.attributedText = attributeString
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     let testTakersLabel = UILabel()
     let mathScoreLabel = UILabel()
     let writingScoreLabel = UILabel()
     let readingScoreLabel = UILabel()
+    
+    let contactLabel: UILabel = {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .title2)
+        let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: "Contact Details:")
+        attributeString.addAttribute(.underlineStyle, value: 1, range: NSMakeRange(0, attributeString.length))
+        label.attributedText = attributeString
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let locationLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let emailLabel = UILabel()
+    let phoneLabel = UILabel()
     
     init(school: School, _ viewModel: SchoolsViewModel) {
         self.school = school
@@ -49,7 +79,7 @@ class DetailViewController: UIViewController {
         title = "School Data"
         viewModel?.delegate = self
         setUpView()
-        viewModel?.getSchoolData(for: school.dbn)
+        viewModel?.getSchoolData(for: school)
     }
     
     private func setUpView() {
@@ -57,15 +87,23 @@ class DetailViewController: UIViewController {
         
         view.addSubview(map)
         view.addSubview(schoolNameLabel)
+        view.addSubview(satScoresLabel)
         view.addSubview(testTakersLabel)
         view.addSubview(mathScoreLabel)
         view.addSubview(writingScoreLabel)
         view.addSubview(readingScoreLabel)
+        view.addSubview(contactLabel)
+        view.addSubview(locationLabel)
+        view.addSubview(emailLabel)
+        view.addSubview(phoneLabel)
         
         testTakersLabel.translatesAutoresizingMaskIntoConstraints = false
         mathScoreLabel.translatesAutoresizingMaskIntoConstraints = false
         writingScoreLabel.translatesAutoresizingMaskIntoConstraints = false
         readingScoreLabel.translatesAutoresizingMaskIntoConstraints = false
+        contactLabel.translatesAutoresizingMaskIntoConstraints = false
+        emailLabel.translatesAutoresizingMaskIntoConstraints = false
+        phoneLabel.translatesAutoresizingMaskIntoConstraints = false
         
         let safeArea = view.safeAreaLayoutGuide
         let padding: CGFloat = 20
@@ -79,8 +117,12 @@ class DetailViewController: UIViewController {
             map.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: padding),
             map.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -padding),
             map.heightAnchor.constraint(equalToConstant: 250),
+            
+            satScoresLabel.topAnchor.constraint(equalTo: map.bottomAnchor, constant: 30),
+            satScoresLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: padding),
+            satScoresLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -padding),
                         
-            testTakersLabel.topAnchor.constraint(equalTo: map.bottomAnchor, constant: padding),
+            testTakersLabel.topAnchor.constraint(equalTo: satScoresLabel.bottomAnchor, constant: padding),
             testTakersLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: padding),
             testTakersLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -padding),
             
@@ -95,6 +137,23 @@ class DetailViewController: UIViewController {
             readingScoreLabel.topAnchor.constraint(equalTo: writingScoreLabel.bottomAnchor, constant: padding),
             readingScoreLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: padding),
             readingScoreLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -padding),
+            
+            contactLabel.topAnchor.constraint(equalTo: readingScoreLabel.bottomAnchor, constant: 30),
+            contactLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: padding),
+            contactLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -padding),
+            
+            locationLabel.topAnchor.constraint(equalTo: contactLabel.bottomAnchor, constant: padding),
+            locationLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: padding),
+            locationLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -padding),
+            
+            emailLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: padding),
+            emailLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: padding),
+            emailLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -padding),
+            
+            phoneLabel.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: padding),
+            phoneLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: padding),
+            phoneLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -padding),
+            
         ])
         
         guard let latString = self.school.latitude, let lngString = self.school.longitude,
@@ -120,12 +179,23 @@ class DetailViewController: UIViewController {
 
 extension DetailViewController: ViewModelDelegate {
     
-    func didFetchSchoolData(_ schoolDetails: SchoolSATData) {
+    func didFetchSchoolData(_ school: School, _ schoolDetails: SchoolSATData) {
         DispatchQueue.main.async {
             self.testTakersLabel.text = "Number of SAT test takers: \(schoolDetails.numOfTestTakers)"
             self.mathScoreLabel.text = "Math SAT score: \t\t\(schoolDetails.mathScore)"
             self.readingScoreLabel.text = "Reading SAT score: \t\(schoolDetails.readingScore)"
             self.writingScoreLabel.text = "Writing SAT score: \t\(schoolDetails.writingScore)"
+            self.locationLabel.text = school.location
+            
+            if let email = school.email {
+                self.emailLabel.text = email
+            } else {
+                self.emailLabel.removeFromSuperview()
+                NSLayoutConstraint.activate([
+                    self.phoneLabel.topAnchor.constraint(equalTo: self.locationLabel.bottomAnchor, constant: 20)
+                ])
+            }
+            self.phoneLabel.text = school.phone
         }
     }
     

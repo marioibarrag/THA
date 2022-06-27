@@ -4,11 +4,11 @@ import Foundation
 
 protocol ViewModelDelegate: AnyObject {
     func didFailFetchingData(error: String)
-    func didFetchSchoolData(_ schoolDetails: SchoolSATData)
+    func didFetchSchoolData(_ school: School, _ schoolDetails: SchoolSATData)
 }
 
 extension ViewModelDelegate {
-    func didFetchSchoolData(_ schoolDetails: SchoolSATData) {}
+    func didFetchSchoolData(_ school: School, _ schoolDetails: SchoolSATData) {}
 }
 
 class SchoolsViewModel {
@@ -62,11 +62,46 @@ class SchoolsViewModel {
         }
     }
     
-    func getSchoolData(for schoolID: String) {
+//    func getSchoolData(for schoolID: String) {
+//        let url = URLs.satDataURL + schoolID
+//
+//        if let data = self.cache[schoolID] {
+//            self.delegate?.didFetchSchoolData(data)
+//        } else {
+//            networkManager.fetchData(from: url, offset: nil, model: [SchoolSATData].self) { [weak self] result in
+//                switch result {
+//
+//                case .success(let schoolData):
+//                    if !schoolData.isEmpty {
+//                        self?.cache[schoolID] = schoolData[0]
+//                        self?.delegate?.didFetchSchoolData(schoolData[0])
+//                    } else {
+//                        let defaultMessage = "No data available"
+//
+//                        let emptySchoolData = SchoolSATData(
+//                            dbn: schoolID,
+//                            numOfTestTakers: defaultMessage,
+//                            readingScore: defaultMessage,
+//                            mathScore: defaultMessage,
+//                            writingScore: defaultMessage)
+//
+//                        self?.cache[schoolID] = emptySchoolData
+//                        self?.delegate?.didFetchSchoolData(emptySchoolData)
+//                    }
+//                case .failure(let error):
+//                    self?.delegate?.didFailFetchingData(error: error.rawValue)
+//
+//                }
+//            }
+//        }
+//    }
+    
+    func getSchoolData(for school: School) {
+        let schoolID = school.dbn
         let url = URLs.satDataURL + schoolID
         
         if let data = self.cache[schoolID] {
-            self.delegate?.didFetchSchoolData(data)
+            self.delegate?.didFetchSchoolData(school, data)
         } else {
             networkManager.fetchData(from: url, offset: nil, model: [SchoolSATData].self) { [weak self] result in
                 switch result {
@@ -74,7 +109,7 @@ class SchoolsViewModel {
                 case .success(let schoolData):
                     if !schoolData.isEmpty {
                         self?.cache[schoolID] = schoolData[0]
-                        self?.delegate?.didFetchSchoolData(schoolData[0])
+                        self?.delegate?.didFetchSchoolData(school, schoolData[0])
                     } else {
                         let defaultMessage = "No data available"
                         
@@ -86,7 +121,7 @@ class SchoolsViewModel {
                             writingScore: defaultMessage)
                         
                         self?.cache[schoolID] = emptySchoolData
-                        self?.delegate?.didFetchSchoolData(emptySchoolData)
+                        self?.delegate?.didFetchSchoolData(school, emptySchoolData)
                     }
                 case .failure(let error):
                     self?.delegate?.didFailFetchingData(error: error.rawValue)
