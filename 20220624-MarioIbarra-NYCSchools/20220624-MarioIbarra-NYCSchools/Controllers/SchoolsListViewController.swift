@@ -9,7 +9,7 @@ class SchoolsListViewController: UIViewController {
     private let tableView: UITableView = {
         let table = UITableView()
         table.register(SchoolCell.self, forCellReuseIdentifier: SchoolCell.identifier)
-        table.estimatedRowHeight = 100
+//        table.estimatedRowHeight = 100
         table.rowHeight = UITableView.automaticDimension
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
@@ -45,6 +45,7 @@ class SchoolsListViewController: UIViewController {
             tableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor)
         ])
+        
     }
 
     private func bindData() {
@@ -60,8 +61,7 @@ class SchoolsListViewController: UIViewController {
     }
     
     @objc private func didTapMapButton() {
-        let mapVC = MapViewController()
-        mapVC.coordinates = viewModel.getCoordinates()
+        let mapVC = MapViewController(pointAnnotations: viewModel.annotations)
         
         navigationController?.pushViewController(mapVC, animated: true)
     }
@@ -83,7 +83,7 @@ extension SchoolsListViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        navigationController?.pushViewController(DetailViewController(school: viewModel.schools[indexPath.row], viewModel), animated: true)
+        navigationController?.pushViewController(DetailViewController(school: viewModel.schools[indexPath.row]), animated: true)
     }
     
     // Very basic "infinite" scrolling. Not really infinite because API only has 440 schools.

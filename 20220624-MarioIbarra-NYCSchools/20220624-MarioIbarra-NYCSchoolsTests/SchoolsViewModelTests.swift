@@ -1,10 +1,3 @@
-//
-//  SchoolsViewModelTests.swift
-//  20220624-MarioIbarra-NYCSchoolsTests
-//
-//  Created by Mario Ibarra on 6/26/22.
-//
-
 import XCTest
 import Combine
 @testable import _0220624_MarioIbarra_NYCSchools
@@ -13,14 +6,6 @@ class SchoolsViewModelTests: XCTestCase {
 
     private var cancellables = Set<AnyCancellable>()
     
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
     func testCanFetchAndDecodeSchools() {
         let fakeNetworkManager = FakeNetworkManager()
         let data = getDataFrom(jsonFile: "School")
@@ -31,17 +16,14 @@ class SchoolsViewModelTests: XCTestCase {
         XCTAssertTrue(!viewModel.schools.isEmpty)
     }
     
-    
-    
     func testCanFetchAndDecodeSchoolData() {
         let fakeNetworkManager = FakeNetworkManager()
         let data = getDataFrom(jsonFile: "SchoolData")
         fakeNetworkManager.data = data
-        let viewModel = SchoolsViewModel(networkManager: fakeNetworkManager)
-        viewModel.getSchoolData(for: "02M438")
-        viewModel.getSchoolData(for: "02M438")
+        let viewModel = SchoolDataViewModel(networkManager: fakeNetworkManager)
+        viewModel.getSchoolData(for: School(dbn: "02M438", schoolName: "", overview: "", location: "", phone: "", email: nil, latitude: "", longitude: ""))
         
-        XCTAssertTrue(!viewModel.cache.isEmpty)
+        XCTAssertTrue(!SchoolDataViewModel.cache.isEmpty)
     }
     
     func testCanGetCoordinatesFromSchool() {
@@ -50,15 +32,14 @@ class SchoolsViewModelTests: XCTestCase {
         fakeNetworkManager.data = data
         let viewModel = SchoolsViewModel(networkManager: fakeNetworkManager)
         viewModel.getSchools()
-        
-        let coordinates = viewModel.getCoordinates()
+    
         /*
          Coordinates from JSON file:
          "latitude": "40.73653",
          "longitude": "-73.9927",
          */
-        XCTAssertEqual(40.73653, coordinates[0]?.0)
-        XCTAssertEqual(-73.9927, coordinates[0]?.1)
+        XCTAssertEqual(40.73653, viewModel.annotations[0].coordinate.latitude)
+        XCTAssertEqual(-73.9927, viewModel.annotations[0].coordinate.longitude)
     }
     
     func testSchoolsFetchError() {
@@ -76,8 +57,8 @@ class SchoolsViewModelTests: XCTestCase {
         // when there's no SAT scores data available from a school, the NYC Schools API returns an empty array
         let data = "[]".data(using: .utf8)!
         fakeNetworkManager.data = data
-        let viewModel = SchoolsViewModel(networkManager: fakeNetworkManager)
-        viewModel.getSchoolData(for: "02M438")
+        let viewModel = SchoolDataViewModel(networkManager: fakeNetworkManager)
+        viewModel.getSchoolData(for: School(dbn: "02M438", schoolName: "", overview: "", location: "", phone: "", email: "", latitude: "", longitude: ""))
         
         let defaultMessage = "No data available"
         let emptySchoolData = SchoolSATData(
@@ -87,7 +68,7 @@ class SchoolsViewModelTests: XCTestCase {
             mathScore: defaultMessage,
             writingScore: defaultMessage)
         
-        XCTAssertEqual(emptySchoolData, viewModel.cache["02M438"]!)
+        XCTAssertEqual(emptySchoolData, SchoolDataViewModel.cache["02M438"]!)
     }
     
     private func getDataFrom(jsonFile: String) -> Data {

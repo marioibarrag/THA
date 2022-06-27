@@ -4,7 +4,7 @@ import CoreLocation
 
 class DetailViewController: UIViewController {
 
-    private var viewModel: SchoolsViewModel?
+    private var viewModel: SchoolDataViewModel?
     var school: School
     let verticalPadding: CGFloat = 10
     let horizontalPadding: CGFloat = 20
@@ -65,9 +65,8 @@ class DetailViewController: UIViewController {
     let emailLabel = UILabel()
     let phoneLabel = UILabel()
     
-    init(school: School, _ viewModel: SchoolsViewModel) {
+    init(school: School) {
         self.school = school
-        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -79,9 +78,12 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         title = "School Data"
+        
+        viewModel = SchoolDataViewModel()
         viewModel?.delegate = self
-        setUpView()
         viewModel?.getSchoolData(for: school)
+        
+        setUpView()
     }
     
     private func setUpView() {
@@ -147,13 +149,14 @@ class DetailViewController: UIViewController {
             locationLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: horizontalPadding),
             locationLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -horizontalPadding),
             
-            emailLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: verticalPadding),
-            emailLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: horizontalPadding),
-            emailLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -horizontalPadding),
-            
-            phoneLabel.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: verticalPadding),
+            phoneLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: verticalPadding),
             phoneLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: horizontalPadding),
-            phoneLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -horizontalPadding)
+            phoneLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -horizontalPadding),
+            
+            emailLabel.topAnchor.constraint(equalTo: phoneLabel.bottomAnchor, constant: verticalPadding),
+            emailLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: horizontalPadding),
+            emailLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -horizontalPadding)
+            
             
         ])
         
@@ -190,12 +193,8 @@ extension DetailViewController: ViewModelDelegate {
             
             if let email = school.email {
                 self.emailLabel.text = email
-            } else {
-                self.emailLabel.removeFromSuperview()
-                NSLayoutConstraint.activate([
-                    self.phoneLabel.topAnchor.constraint(equalTo: self.locationLabel.bottomAnchor, constant: self.verticalPadding)
-                ])
             }
+            
             self.phoneLabel.text = school.phone
         }
     }

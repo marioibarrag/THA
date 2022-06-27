@@ -1,6 +1,6 @@
 import Foundation
-//import MapKit
-//import CoreLocation
+import MapKit
+import CoreLocation
 
 protocol ViewModelDelegate: AnyObject {
     func didFailFetchingData(error: String)
@@ -25,7 +25,7 @@ class SchoolsViewModel {
     private var isFetchingData = false
     private var moreSchoolsAvail = true
     var offset = 0
-//    var annotations: [MKPointAnnotation] = []
+    var annotations: [MKPointAnnotation] = []
     
     init(networkManager: NetworkManagerProtocol = NetworkManager()) {
         self.networkManager = networkManager
@@ -51,7 +51,7 @@ class SchoolsViewModel {
                 self.isFetchingData = false
                 self.schools.append(contentsOf: schools)
                 self.offset += schools.count
-//                self.getCoordinates()
+                self.getPointAnnotations()
                 if self.offset > 0 && schools.isEmpty {
                     self.moreSchoolsAvail = false
                 }
@@ -62,95 +62,20 @@ class SchoolsViewModel {
         }
     }
     
-//    func getSchoolData(for schoolID: String) {
-//        let url = URLs.satDataURL + schoolID
-//
-//        if let data = self.cache[schoolID] {
-//            self.delegate?.didFetchSchoolData(data)
-//        } else {
-//            networkManager.fetchData(from: url, offset: nil, model: [SchoolSATData].self) { [weak self] result in
-//                switch result {
-//
-//                case .success(let schoolData):
-//                    if !schoolData.isEmpty {
-//                        self?.cache[schoolID] = schoolData[0]
-//                        self?.delegate?.didFetchSchoolData(schoolData[0])
-//                    } else {
-//                        let defaultMessage = "No data available"
-//
-//                        let emptySchoolData = SchoolSATData(
-//                            dbn: schoolID,
-//                            numOfTestTakers: defaultMessage,
-//                            readingScore: defaultMessage,
-//                            mathScore: defaultMessage,
-//                            writingScore: defaultMessage)
-//
-//                        self?.cache[schoolID] = emptySchoolData
-//                        self?.delegate?.didFetchSchoolData(emptySchoolData)
-//                    }
-//                case .failure(let error):
-//                    self?.delegate?.didFailFetchingData(error: error.rawValue)
-//
-//                }
-//            }
-//        }
-//    }
-    
-    func getSchoolData(for school: School) {
-        let schoolID = school.dbn
-        let url = URLs.satDataURL + schoolID
+    func getPointAnnotations() {
         
-        if let data = self.cache[schoolID] {
-            self.delegate?.didFetchSchoolData(school, data)
-        } else {
-            networkManager.fetchData(from: url, offset: nil, model: [SchoolSATData].self) { [weak self] result in
-                switch result {
-                    
-                case .success(let schoolData):
-                    if !schoolData.isEmpty {
-                        self?.cache[schoolID] = schoolData[0]
-                        self?.delegate?.didFetchSchoolData(school, schoolData[0])
-                    } else {
-                        let defaultMessage = "No data available"
-                        
-                        let emptySchoolData = SchoolSATData(
-                            dbn: schoolID,
-                            numOfTestTakers: defaultMessage,
-                            readingScore: defaultMessage,
-                            mathScore: defaultMessage,
-                            writingScore: defaultMessage)
-                        
-                        self?.cache[schoolID] = emptySchoolData
-                        self?.delegate?.didFetchSchoolData(school, emptySchoolData)
-                    }
-                case .failure(let error):
-                    self?.delegate?.didFailFetchingData(error: error.rawValue)
-                    
-                }
-            }
-        }
-    }
-    
-    func getCoordinates() -> [(Double, Double, String)?] {
-        let coordinates = schools.map({ school -> (Double, Double, String)? in
+        self.annotations = self.schools.compactMap({ school -> MKPointAnnotation? in
+            
             guard let latStr = school.latitude, let lngStr = school.longitude, let lat = Double(latStr), let lng = Double(lngStr) else {
                 return nil
             }
-            return (lat, lng, school.schoolName)
+            
+            let annotation = MKPointAnnotation()
+            annotation.title = school.schoolName
+            annotation.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+            return annotation
         })
         
-//        self.annotations = self.schools.compactMap({ school -> MKPointAnnotation? in
-//
-//            guard let latStr = school.latitude, let lngStr = school.longitude, let lat = Double(latStr), let lng = Double(lngStr) else {
-//                return nil
-//            }
-//
-//            let annotation = MKPointAnnotation()
-//            annotation.title = school.schoolName
-//            annotation.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
-//            return annotation
-//        })
-        
-        return coordinates
     }
+
 }

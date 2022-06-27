@@ -27,6 +27,7 @@
 		025BFBD8286903E700B2008A /* SchoolsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 025BFBD7286903E700B2008A /* SchoolsViewModelTests.swift */; };
 		025BFBDA2869133B00B2008A /* School.json in Resources */ = {isa = PBXBuildFile; fileRef = 025BFBD92869133B00B2008A /* School.json */; };
 		025BFBDC286916DC00B2008A /* SchoolData.json in Resources */ = {isa = PBXBuildFile; fileRef = 025BFBDB286916DC00B2008A /* SchoolData.json */; };
+		026A9DC72869EC1E00CB27F3 /* SchoolDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026A9DC62869EC1E00CB27F3 /* SchoolDataViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		025BFBD7286903E700B2008A /* SchoolsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolsViewModelTests.swift; sourceTree = "<group>"; };
 		025BFBD92869133B00B2008A /* School.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = School.json; sourceTree = "<group>"; };
 		025BFBDB286916DC00B2008A /* SchoolData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = SchoolData.json; sourceTree = "<group>"; };
+		026A9DC62869EC1E00CB27F3 /* SchoolDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolDataViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				025BFBB328660C6600B2008A /* SchoolsViewModel.swift */,
+				026A9DC62869EC1E00CB27F3 /* SchoolDataViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -300,6 +303,7 @@
 				025BFBB828660C9800B2008A /* URLs.swift in Sources */,
 				025BFB982865FBC900B2008A /* SchoolsListViewController.swift in Sources */,
 				025BFB942865FBC900B2008A /* AppDelegate.swift in Sources */,
+				026A9DC72869EC1E00CB27F3 /* SchoolDataViewModel.swift in Sources */,
 				025BFBC52866DBB600B2008A /* MapViewController.swift in Sources */,
 				025BFB962865FBC900B2008A /* SceneDelegate.swift in Sources */,
 				025BFBB628660C8800B2008A /* NetworkManager.swift in Sources */,
