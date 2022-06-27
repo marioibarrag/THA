@@ -53,9 +53,6 @@ class SchoolCell: UITableViewCell {
         
         attributeString.addAttribute(NSAttributedString.Key.font, value: UIFont.systemFont(ofSize: 24, weight: .medium), range: NSMakeRange(0, attributeString.length))
         
-//        let attrs = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 24, weight: .medium), NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue] as [NSAttributedString.Key : Any]
-        
-//        attributeString.addAttributes(attrs, range: NSMakeRange(0, attributeString.length))
         schoolNameLabel.attributedText = attributeString
         schoolOverviewLabel.text = school.overview
     }

@@ -6,6 +6,8 @@ class DetailViewController: UIViewController {
 
     private var viewModel: SchoolsViewModel?
     var school: School
+    let verticalPadding: CGFloat = 10
+    let horizontalPadding: CGFloat = 20
     
     private let map: MKMapView = {
         let map = MKMapView()
@@ -106,53 +108,52 @@ class DetailViewController: UIViewController {
         phoneLabel.translatesAutoresizingMaskIntoConstraints = false
         
         let safeArea = view.safeAreaLayoutGuide
-        let padding: CGFloat = 20
         
         NSLayoutConstraint.activate([
-            schoolNameLabel.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: padding),
+            schoolNameLabel.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: verticalPadding),
             schoolNameLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
             schoolNameLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
             
             map.topAnchor.constraint(equalTo: schoolNameLabel.bottomAnchor, constant: 30),
-            map.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: padding),
-            map.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -padding),
+            map.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: horizontalPadding),
+            map.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -horizontalPadding),
             map.heightAnchor.constraint(equalToConstant: 250),
             
             satScoresLabel.topAnchor.constraint(equalTo: map.bottomAnchor, constant: 30),
-            satScoresLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: padding),
-            satScoresLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -padding),
+            satScoresLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: horizontalPadding),
+            satScoresLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -horizontalPadding),
                         
-            testTakersLabel.topAnchor.constraint(equalTo: satScoresLabel.bottomAnchor, constant: padding),
-            testTakersLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: padding),
-            testTakersLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -padding),
+            testTakersLabel.topAnchor.constraint(equalTo: satScoresLabel.bottomAnchor, constant: verticalPadding),
+            testTakersLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: horizontalPadding),
+            testTakersLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -horizontalPadding),
             
-            mathScoreLabel.topAnchor.constraint(equalTo: testTakersLabel.bottomAnchor, constant: padding),
-            mathScoreLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: padding),
-            mathScoreLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -padding),
+            mathScoreLabel.topAnchor.constraint(equalTo: testTakersLabel.bottomAnchor, constant: verticalPadding),
+            mathScoreLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: horizontalPadding),
+            mathScoreLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -horizontalPadding),
             
-            writingScoreLabel.topAnchor.constraint(equalTo: mathScoreLabel.bottomAnchor, constant: padding),
-            writingScoreLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: padding),
-            writingScoreLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -padding),
+            writingScoreLabel.topAnchor.constraint(equalTo: mathScoreLabel.bottomAnchor, constant: verticalPadding),
+            writingScoreLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: horizontalPadding),
+            writingScoreLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -horizontalPadding),
             
-            readingScoreLabel.topAnchor.constraint(equalTo: writingScoreLabel.bottomAnchor, constant: padding),
-            readingScoreLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: padding),
-            readingScoreLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -padding),
+            readingScoreLabel.topAnchor.constraint(equalTo: writingScoreLabel.bottomAnchor, constant: verticalPadding),
+            readingScoreLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: horizontalPadding),
+            readingScoreLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -horizontalPadding),
             
             contactLabel.topAnchor.constraint(equalTo: readingScoreLabel.bottomAnchor, constant: 30),
-            contactLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: padding),
-            contactLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -padding),
+            contactLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: horizontalPadding),
+            contactLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -horizontalPadding),
             
-            locationLabel.topAnchor.constraint(equalTo: contactLabel.bottomAnchor, constant: padding),
-            locationLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: padding),
-            locationLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -padding),
+            locationLabel.topAnchor.constraint(equalTo: contactLabel.bottomAnchor, constant: verticalPadding),
+            locationLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: horizontalPadding),
+            locationLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -horizontalPadding),
             
-            emailLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: padding),
-            emailLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: padding),
-            emailLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -padding),
+            emailLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: verticalPadding),
+            emailLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: horizontalPadding),
+            emailLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -horizontalPadding),
             
-            phoneLabel.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: padding),
-            phoneLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: padding),
-            phoneLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -padding),
+            phoneLabel.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: verticalPadding),
+            phoneLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: horizontalPadding),
+            phoneLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -horizontalPadding)
             
         ])
         
@@ -192,7 +193,7 @@ extension DetailViewController: ViewModelDelegate {
             } else {
                 self.emailLabel.removeFromSuperview()
                 NSLayoutConstraint.activate([
-                    self.phoneLabel.topAnchor.constraint(equalTo: self.locationLabel.bottomAnchor, constant: 20)
+                    self.phoneLabel.topAnchor.constraint(equalTo: self.locationLabel.bottomAnchor, constant: self.verticalPadding)
                 ])
             }
             self.phoneLabel.text = school.phone
